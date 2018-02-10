@@ -206,11 +206,27 @@ cp "${CUR_DIR}/${ARGS['config'] :=DefaultGame.ini}" "${CUR_DIR}/configs/${ARGS['
 
 [ ! -z "${ARGS['maxclients']}" ] && sed -i -r "s/^(MaxPlayersPerTeam)=.*/\1=${ARGS['maxclients']}/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
 
-[ ! -z "${ARGS['steamid']}" ] && sed -i -r "s/^(\+AdminSteamIDs)=.*/\1=${ARGS['steamid']}/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
-
 [ ! -z "${ARGS['maprotation']}" ] && sed -i -r "s/^(RandomMapRotationEnabled)=.*/\1=${ARGS['maprotation']}/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
 
 [ ! -z "${ARGS['requiredplayers']}" ] && sed -i -r "s/^(RequiredPlayers)=.*/\1=${ARGS['requiredplayers']}/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
+
+if [ ! -z "${ARGS['steamid']}" ] ; then
+
+  for steamid in ${ARGS['steamid']}; do
+  
+    if [ "${steamid}" = "${ARGS[steamid]/ *}" ]; then
+    
+      sed -i -r "s/^(\+AdminSteamIDs)=.*/\1=\"${ARGS['steamid']}\"/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
+    
+    else
+    
+      sed -i "/+AdminSteamIDs=/a +AdminSteamIDs=\"${steamid}\"" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
+    
+    fi
+
+  done
+
+fi
 
 cd "${CUR_DIR}";
 
