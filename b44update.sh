@@ -139,6 +139,10 @@ declare -A ARG=(
   ['--hostname']="hostname"
   ['-r']="maprotation"
   ['--maprotation']="maprotation"
+  ['-R']="requiredplayers"
+  ['--requiredplayers']="requiredplayers"
+  ['-q']="queryport"
+  ['--queryport']="queryport"
 );
 
 # Collect and set the arguments.
@@ -190,25 +194,30 @@ fi
 
 mkdir -p "${CUR_DIR}/configs/${ARGS['port']}/logs";
 
-cp "${CUR_DIR}/${config:=DefaultGame.ini}" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini"
+cp "${CUR_DIR}/${ARGS['config'] :=DefaultGame.ini}" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
 
-[ "${ARGS['playmode']}" == "Comp" ] && maxclients=10;
+[ ! -z "${ARGS['hostname']}" ] && sed -i -r "s/^(ServerName)=.*/\1=${ARGS['hostname']}/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
 
-sed -i -r -e "s/^(ServerName)=.*/\1=${ARGS['hostname']}/g" \
-          -e "s/^(Password)=.*/\1=${ARGS['password']}/g" \
-          -e "s/^(PlayMode)=.*/\1=${ARGS['playmode']}/g" \
-          -e "s/^(StartType)=.*/\1=${ARGS['starttype']}/g" \
-          -e "s/^(MaxPlayersPerTeam)=.*/\1=${ARGS['maxclients']}/g" \
-          -e "s/^(\+AdminSteamIDs)=.*/\1=\"${ARGS['steamid']}\"/g" \
-          -e "s/^(RandomMapRotationEnabled)=.*/\1=${ARGS['maprotation']:-False}/g" \
-          -e "s/^(RequiredPlayers)=.*/\1=2/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini"
+[ ! -z "${ARGS['password']}" ] && sed -i -r "s/^(Password)=.*/\1=${ARGS['password']}/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
+
+[ ! -z "${ARGS['playmode']}" ] && sed -i -r "s/^(PlayMode)=.*/\1=${ARGS['playmode']}/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
+
+[ ! -z "${ARGS['starttype']}" ] && sed -i -r "s/^(StartType)=.*/\1=${ARGS['starttype']}/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
+
+[ ! -z "${ARGS['maxclients']}" ] && sed -i -r "s/^(MaxPlayersPerTeam)=.*/\1=${ARGS['maxclients']}/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
+
+[ ! -z "${ARGS['steamid']}" ] && sed -i -r "s/^(\+AdminSteamIDs)=.*/\1=${ARGS['steamid']}/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
+
+[ ! -z "${ARGS['maprotation']}" ] && sed -i -r "s/^(RandomMapRotationEnabled)=.*/\1=${ARGS['maprotation']}/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
+
+[ ! -z "${ARGS['requiredplayers']}" ] && sed -i -r "s/^(RequiredPlayers)=.*/\1=${ARGS['requiredplayers']}/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
 
 cd "${CUR_DIR}";
 
-./Battalion/Binaries/Linux/BattalionServer /Game/Maps/Final_Maps/${ARGS['map']}?Game=/Script/ShooterGame.${ARGS['gamemode']}GameMode?listen -broadcastip="${ARGS['ip']}" -PORT=${ARGS['port']} -QueryPort=$(( ${ARGS['port']} - 1000 )) -log -logfilesloc="${CUR_DIR}/logs" -userdir="${CUR_DIR}" -defgameini="${CUR_DIR}/configs/${ARGS['port']}/Game.ini"
+./Battalion/Binaries/Linux/BattalionServer /Game/Maps/Final_Maps/${ARGS['map']}?Game=/Script/ShooterGame.${ARGS['gamemode']}GameMode?listen -broadcastip="${ARGS['ip']}" -PORT=${ARGS['port']} -QueryPort=${ARGS['queryport']:=$(( ${ARGS['port']} - 1000 ))} -log -logfilesloc="${CUR_DIR}/logs" -userdir="${CUR_DIR}" -defgameini="${CUR_DIR}/configs/${ARGS['port']}/Game.ini"
 EOF
 
-  chmod u+x "${B44_ROOT}"/start.sh "${B44_ROOT}"/Battalion/Binaries/Linux/BattalionServer;
+  chmod u+x "${B44_ROOT}"/start.sh "${B44_ROOT}"/Battalion/Binaries/Linux/BattalionServer;c
 
   # Set a trigger file (if the TRIGGER_FILE variable has been set); so (CRON) scripts can run a specific action after an update of the B44 gameserver (the trigger file can be deleted, after this cronjob has been done).
   [ ! -z "${TRIGGER_FILE}" ] && echo "${CUR_SVER}" > "${CUR_DIR}/.b44server_update_completed";
