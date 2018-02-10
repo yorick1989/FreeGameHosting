@@ -131,6 +131,8 @@ declare -A ARG=(
   ['--gamemode']="gamemode"
   ['-c']="maxclients"
   ['--max-clients']="maxclients"
+  ['-C']="config"
+  ['--config']="config"
   ['-S']="steamid"
   ['--steamid']="steamid"
   ['-s']="starttype"
@@ -180,9 +182,17 @@ function parser() {
 
 parser "${@}"
 
+if [ ! -z "${ARGS['config']}" ] && [ ! -f "${CUR_DIR}/${ARGS['config']}" ]; then
+  
+  echo "The config file '${CUR_DIR}/${ARGS['config']}' could not be found.";
+
+  exit;
+
+fi
+
 mkdir -p "${CUR_DIR}/configs/${ARGS['port']}/logs";
 
-cp "${CUR_DIR}/DefaultGame.ini" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini"
+cp "${CUR_DIR}/${config:=DefaultGame.ini}" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini"
 
 [ "${ARGS['playmode']}" == "Comp" ] && maxclients=10;
 
@@ -201,6 +211,9 @@ cd "${CUR_DIR}";
 EOF
 
   chmod u+x "${B44_ROOT}"/start.sh "${B44_ROOT}"/Battalion/Binaries/Linux/BattalionServer;
+
+  # Set a trigger file (if the TRIGGER_FILE variable has been set); so (CRON) scripts can run a specific action after an update of the B44 gameserver (the trigger file can be deleted, after this cronjob has been done).
+  [ ! -z "${TRIGGER_FILE}" ] && echo "${CUR_SVER}" > "${CUR_DIR}/.b44server_update_completed";
 
   echo "Battalion 1944 server has been updated.";
 
