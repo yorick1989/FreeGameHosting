@@ -91,10 +91,10 @@ if [ -f "${CUR_DIR}/temp/b44/server_${CUR_SVER}.zip" ]; then
   # Remove the B44 directory where all the downloading and unzipping happened (not needed anymore).
   rm -rf "${CUR_DIR}"/temp/b44;
 
-  mv "${CUR_DIR}"/temp/b44_tmp "${CUR_DIR}"/temp/b44;
-
   # Move the config from the root B44 directory to the temp B44 directory.
   [ -d "${B44_ROOT}/configs" ] && mv "${B44_ROOT}/configs" "${CUR_DIR}/temp/b44_tmp/configs"
+
+  mv "${CUR_DIR}"/temp/b44_tmp "${CUR_DIR}"/temp/b44;
 
   # Remove the old B44 root directory.
   [ -d "${B44_ROOT}" ] && rm -rf "${B44_ROOT}";
