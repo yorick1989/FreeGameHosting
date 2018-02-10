@@ -233,7 +233,7 @@ cd "${CUR_DIR}";
 ./Battalion/Binaries/Linux/BattalionServer /Game/Maps/Final_Maps/${ARGS['map']}?Game=/Script/ShooterGame.${ARGS['gamemode']}GameMode?listen -broadcastip="${ARGS['ip']}" -PORT=${ARGS['port']} -QueryPort=${ARGS['queryport']:=$(( ${ARGS['port']} - 1000 ))} -log -logfilesloc="${CUR_DIR}/logs" -userdir="${CUR_DIR}" -defgameini="${CUR_DIR}/configs/${ARGS['port']}/Game.ini"
 EOF
 
-  chmod u+x "${B44_ROOT}"/start.sh "${B44_ROOT}"/Battalion/Binaries/Linux/BattalionServer;c
+  chmod u+x "${B44_ROOT}"/start.sh "${B44_ROOT}"/Battalion/Binaries/Linux/BattalionServer
 
   # Set a trigger file (if the TRIGGER_FILE variable has been set); so (CRON) scripts can run a specific action after an update of the B44 gameserver (the trigger file can be deleted, after this cronjob has been done).
   [ ! -z "${TRIGGER_FILE}" ] && echo "${CUR_SVER}" > "${CUR_DIR}/.b44server_update_completed";
