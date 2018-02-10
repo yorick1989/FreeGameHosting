@@ -194,7 +194,7 @@ fi
 
 mkdir -p "${CUR_DIR}/configs/${ARGS['port']}/logs";
 
-cp "${CUR_DIR}/${ARGS['config'] :=DefaultGame.ini}" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
+cp "${CUR_DIR}/${ARGS['config']:=DefaultGame.ini}" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
 
 [ ! -z "${ARGS['hostname']}" ] && sed -i -r "s/^(ServerName)=.*/\1=${ARGS['hostname']}/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
 
@@ -216,7 +216,7 @@ if [ ! -z "${ARGS['steamid']}" ] ; then
   
     if [ "${steamid}" = "${ARGS[steamid]/ *}" ]; then
     
-      sed -i -r "s/^(\+AdminSteamIDs)=.*/\1=\"${ARGS['steamid']}\"/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
+      sed -i -r "s/^(\+AdminSteamIDs)=.*/\1=\"${steamid}\"/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
     
     else
     
