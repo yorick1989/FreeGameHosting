@@ -216,11 +216,11 @@ if [ ! -z "${ARGS['steamid']}" ] ; then
   
     if [ "${steamid}" = "${ARGS[steamid]/ *}" ]; then
     
-      sed -i -r "s/^(\+AdminSteamIDs)=.*/\1=\"${steamid}\"/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
+      sed -i -r "s/^(\+AdminSteamIDs)=.*/\1=\"${steamid// /}\"/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
     
     else
     
-      sed -i "/+AdminSteamIDs=/a +AdminSteamIDs=\"${steamid}\"" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
+      sed -i "/+AdminSteamIDs=/a +AdminSteamIDs=\"${steamid// /}\"" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
     
     fi
 
