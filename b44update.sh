@@ -200,8 +200,6 @@ cp "${CUR_DIR}/${ARGS['config']:=DefaultGame.ini}" "${CUR_DIR}/configs/${ARGS['p
 
 [ ! -z "${ARGS['password']}" ] && sed -i -r "s/^(Password)=.*/\1=${ARGS['password']}/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
 
-[ ! -z "${ARGS['playmode']}" ] && sed -i -r "s/^(PlayMode)=.*/\1=${ARGS['playmode']}/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
-
 [ ! -z "${ARGS['starttype']}" ] && sed -i -r "s/^(StartType)=.*/\1=${ARGS['starttype']}/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
 
 [ ! -z "${ARGS['maxclients']}" ] && sed -i -r "s/^(MaxPlayersPerTeam)=.*/\1=${ARGS['maxclients']}/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
@@ -209,6 +207,22 @@ cp "${CUR_DIR}/${ARGS['config']:=DefaultGame.ini}" "${CUR_DIR}/configs/${ARGS['p
 [ ! -z "${ARGS['maprotation']}" ] && sed -i -r "s/^(RandomMapRotationEnabled)=.*/\1=${ARGS['maprotation']}/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
 
 [ ! -z "${ARGS['requiredplayers']}" ] && sed -i -r "s/^(RequiredPlayers)=.*/\1=${ARGS['requiredplayers']}/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
+
+if [ ! -z "${ARGS['playmode']}" ]; then
+
+  sed -i -r "s/^(PlayMode)=.*/\1=${ARGS['playmode']}/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
+
+  if [ "${ARGS['gamemode']^^}" = "BOMB" ] && [ "${ARGS['gamemode']}" = "Comp" ]; then
+
+    sed -i -r "s/^(Deckname)=(UnrankedBOMB|INF)Deck0.*/\1=${ARGS['gamemode']^^}Deck0/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
+
+  else
+
+    sed -i -r "s/^(Deckname)=INFDeck0.*/\1=${ARGS['gamemode']^^}Deck0/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
+
+  fi
+
+fi
 
 if [ ! -z "${ARGS['steamid']}" ] ; then
 
