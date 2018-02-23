@@ -84,7 +84,7 @@ if [ -z "${CUR_SVER}" ] || ! grep -q "Current Version: ${CUR_SVER}" <<< "${web_c
 
   [ "$?" = 0 ] && rm -f "/tmp/server_${CUR_SVER}.zip";
 
-  cp -rf  "${B44_ROOT}"/LinuxServer/* "${B44_ROOT}/";
+  nice -n19 ionice -c2 -n7 rsync -rauzi --no-owner --no-group "${B44_ROOT}"/LinuxServer "${B44_ROOT}/"
 
   rm -rf "${B44_ROOT}"/LinuxServer;
 
