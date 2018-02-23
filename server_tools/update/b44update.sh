@@ -80,7 +80,7 @@ if [ -z "${CUR_SVER}" ] || ! grep -q "Current Version: ${CUR_SVER}" <<< "${web_c
   wget -4O "/tmp/server_${CUR_SVER}.zip" "${FILE_URL}";
 
   # Unzip the server files to the document root of the b44 gameserver (overwrite existing files).
-  unzip -o -d "${B44_ROOT}" "/tmp/server_${CUR_SVER}.zip";
+  unzip -o -d "${B44_ROOT}" "/tmp/server_${CUR_SVER}.zip" 'LinuxServer/*';
 
   [ "$?" = 0 ] && rm -f "/tmp/server_${CUR_SVER}.zip";
 
