@@ -88,6 +88,8 @@ if [ -z "${CUR_SVER}" ] || ! grep -q "Current Version: ${CUR_SVER}" <<< "${web_c
 
   rm -rf "${B44_ROOT}"/LinuxServer;
 
+  chmod u+x "${B44_ROOT}"/Battalion/Binaries/Linux/BattalionServer;
+
   echo ${CUR_SVER} > "${B44_ROOT}/.b44server_version";
 
   # Set a trigger file (if the TRIGGER_FILE variable has been set); so (CRON) scripts can run a specific action after an update of the B44 gameserver (the trigger file can be deleted, after this cronjob has been done).
@@ -113,6 +115,8 @@ done
 if [ ! -f "${B44_ROOT}/${URL_B44START/*\//}" ] || [ -n "$(diff "${B44_ROOT}/${URL_B44START/*\//}" <(echo "${URL_CONTENT}"))" ] ;then
 
   echo "${URL_CONTENT}" > "${B44_ROOT}/${URL_B44START/*\//}";
+
+  chmod u+x "${B44_ROOT}/${URL_B44START/*\//}";
 
   echo "Battalion 1944 startup script has been updated.";
 
