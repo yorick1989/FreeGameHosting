@@ -86,7 +86,7 @@ if [ -z "${CUR_SVER}" ] || ! grep -q "Current Version: ${CUR_SVER}" <<< "${web_c
 
   cp -rf  "${B44_ROOT}"/LinuxServer/* "${B44_ROOT}/";
 
-  rm -rf "${B44_ROOT}"/LinuxServer";
+  rm -rf "${B44_ROOT}"/LinuxServer;
 
   echo ${CUR_SVER} > "${B44_ROOT}/.b44server_version";
 
