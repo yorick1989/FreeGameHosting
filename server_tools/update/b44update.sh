@@ -77,6 +77,8 @@ if [ -z "${CUR_SVER}" ] || ! grep -q "Current Version: ${CUR_SVER}" <<< "${web_c
 
   FILE_URL=$( grep -P ".*(http.*LinuxServer_(.*).zip).*" <<< "${web_content}" | sed -r "s/.*(http.*LinuxServer.*_(.*).zip).*/\1/" )
 
+  wget -4O "/tmp/server_${CUR_SVER}.zip" "${FILE_URL}";
+
   # Unzip the server files to the document root of the b44 gameserver (overwrite existing files).
   unzip -o -d "${B44_ROOT}" "/tmp/server_${CUR_SVER}.zip";
 
@@ -104,7 +106,7 @@ while [ -z "${URL_CONTENT}" ]; do
 done
 
 # Update the currect update-file with the new content, if there are some diffs / changes been found. If so, the new version will be executed and the old one will exit.
-if [ -n "$(diff "${B44_ROOT}/${URL_B44START/*\//}" <(echo "${URL_CONTENT}"))" ] ;then
+if [ ! -f "${B44_ROOT}/${URL_B44START/*\//}" ] || [ -n "$(diff "${B44_ROOT}/${URL_B44START/*\//}" <(echo "${URL_CONTENT}"))" ] ;then
 
   echo "${URL_CONTENT}" > "${B44_ROOT}/${URL_B44START/*\//}";
 
