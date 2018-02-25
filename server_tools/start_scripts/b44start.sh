@@ -105,7 +105,7 @@ cp "${CUR_DIR}/${ARGS['config']:=DefaultGame.ini}" "${CUR_DIR}/configs/${ARGS['p
 
 [ ! -z "${ARGS['requiredplayers']}" ] && sed -i -r "s/^(RequiredPlayers)=.*/\1=${ARGS['requiredplayers']}/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
 
-[ ! -z "${ARGS['gamemode']}" ] && sed -r -e 's/^(\+ModeRotation=\/Script\/ShooterGame\..+GameMode)/\/\/\1/gI' -e "s/^\/\/(\+ModeRotation=\/Script\/ShooterGame\.${ARGS['gamemode']}GameMode)/\1/gI" -e '/\/\/(\+ModeRotation=\/Script\/ShooterGame\..+GameMode)/d' "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
+[ ! -z "${ARGS['gamemode']}" ] && sed -i -r -e 's/^(\+ModeRotation=\/Script\/ShooterGame\..+GameMode)/\/\/\1/gI' -e "s/^\/\/(\+ModeRotation=\/Script\/ShooterGame\.${ARGS['gamemode']}GameMode)/\1/gI" -e '/\/\/(\+ModeRotation=\/Script\/ShooterGame\..+GameMode)/d' "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
 
 if [ ! -z "${ARGS['playmode']}" ]; then
 
