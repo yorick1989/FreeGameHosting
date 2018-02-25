@@ -143,4 +143,4 @@ fi
 
 cd "${CUR_DIR}";
 
-./Battalion/Binaries/Linux/BattalionServer /Game/Maps/Final_Maps/${ARGS['map']}?Game=/Script/ShooterGame.${ARGS['gamemode']}GameMode?listen -broadcastip="${ARGS['ip']}" -PORT=${ARGS['port']} -QueryPort=${ARGS['queryport']:=$(( ${ARGS['port']} - 1000 ))} -log -logfilesloc="${CUR_DIR}/logs" -userdir="${CUR_DIR}" -defgameini="${CUR_DIR}/configs/${ARGS['port']}/Game.ini"
+./Battalion/Binaries/Linux/BattalionServer /Game/Maps/Final_Maps/${ARGS['map']}?Game=/Script/ShooterGame.${ARGS['gamemode']}GameMode?listen -broadcastip="${ARGS['ip']}" -PORT=${ARGS['port']} -QueryPort=${ARGS['queryport']:=$(( ${ARGS['port']} - 1000 ))} -log -logfilesloc="${CUR_DIR}/logs/configs/${ARGS['port']}" -userdir="${CUR_DIR}" -defgameini="${CUR_DIR}/configs/${ARGS['port']}/Game.ini"
