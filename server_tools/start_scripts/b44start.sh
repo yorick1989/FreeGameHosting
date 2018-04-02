@@ -8,7 +8,7 @@ CUR_DIR=$(cd $(dirname "${0}") && pwd);
 
 CUR_FILE=${0/*\//};
 
-GAME_LOC=${CUR_DIR};
+LINUX_DIR="${CUR_DIR}/Linux";
 
 # Set the arguments to search for.
 declare -A ARG=(
@@ -81,43 +81,43 @@ function argsparser() {
 
 argsparser "${@}"
 
-if [ ! -z "${ARGS['config']}" ] && [ ! -f "${CUR_DIR}/${ARGS['config']}" ]; then
-  
-  echo "The config file '${CUR_DIR}/${ARGS['config']}' could not be found.";
+if [ ! -z "${ARGS['config']}" ] && [ ! -f "${LINUX_DIR}/${ARGS['config']}" ]; then
+
+  echo "The config file '${LINUX_DIR}/${ARGS['config']}' could not be found.";
 
   exit;
 
 fi
 
-mkdir -p "${CUR_DIR}/configs/${ARGS['port']}/logs";
+mkdir -p "${LINUX_DIR}/configs/${ARGS['port']}/logs";
 
-cp "${CUR_DIR}/${ARGS['config']:=DefaultGame.ini}" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
+cp "${LINUX_DIR}/${ARGS['config']:=DefaultGame.ini}" "${LINUX_DIR}/configs/${ARGS['port']}/Game.ini";
 
-[ ! -z "${ARGS['hostname']}" ] && sed -i -r "s/^(ServerName)=.*/\1=${ARGS['hostname']}/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
+[ ! -z "${ARGS['hostname']}" ] && sed -i -r "s/^(ServerName)=.*/\1=${ARGS['hostname']}/g" "${LINUX_DIR}/configs/${ARGS['port']}/Game.ini";
 
-[ ! -z "${ARGS['password']}" ] && sed -i -r "s/^(Password)=.*/\1=${ARGS['password']}/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
+[ ! -z "${ARGS['password']}" ] && sed -i -r "s/^(Password)=.*/\1=${ARGS['password']}/g" "${LINUX_DIR}/configs/${ARGS['port']}/Game.ini";
 
-[ ! -z "${ARGS['starttype']}" ] && sed -i -r "s/^(StartType)=.*/\1=${ARGS['starttype']}/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
+[ ! -z "${ARGS['starttype']}" ] && sed -i -r "s/^(StartType)=.*/\1=${ARGS['starttype']}/g" "${LINUX_DIR}/configs/${ARGS['port']}/Game.ini";
 
-[ ! -z "${ARGS['maxclients']}" ] && sed -i -r "s/^(MaxPlayersPerTeam)=.*/\1=${ARGS['maxclients']}/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
+[ ! -z "${ARGS['maxclients']}" ] && sed -i -r "s/^(MaxPlayersPerTeam)=.*/\1=${ARGS['maxclients']}/g" "${LINUX_DIR}/configs/${ARGS['port']}/Game.ini";
 
-[ ! -z "${ARGS['maprotation']}" ] && sed -i -r "s/^(RandomMapRotationEnabled)=.*/\1=${ARGS['maprotation']}/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
+[ ! -z "${ARGS['maprotation']}" ] && sed -i -r "s/^(RandomMapRotationEnabled)=.*/\1=${ARGS['maprotation']}/g" "${LINUX_DIR}/configs/${ARGS['port']}/Game.ini";
 
-[ ! -z "${ARGS['requiredplayers']}" ] && sed -i -r "s/^(RequiredPlayers)=.*/\1=${ARGS['requiredplayers']}/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
+[ ! -z "${ARGS['requiredplayers']}" ] && sed -i -r "s/^(RequiredPlayers)=.*/\1=${ARGS['requiredplayers']}/g" "${LINUX_DIR}/configs/${ARGS['port']}/Game.ini";
 
-[ ! -z "${ARGS['gamemode']}" ] && sed -i -r -e 's/^(\+ModeRotation=\/Script\/ShooterGame\..+GameMode)/\/\/\1/gI' -e "s/^\/\/(\+ModeRotation=\/Script\/ShooterGame\.${ARGS['gamemode']}GameMode)/\1/gI" -e '/\/\/(\+ModeRotation=\/Script\/ShooterGame\..+GameMode)/d' "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
+[ ! -z "${ARGS['gamemode']}" ] && sed -i -r -e 's/^(\+ModeRotation=\/Script\/ShooterGame\..+GameMode)/\/\/\1/gI' -e "s/^\/\/(\+ModeRotation=\/Script\/ShooterGame\.${ARGS['gamemode']}GameMode)/\1/gI" -e '/\/\/(\+ModeRotation=\/Script\/ShooterGame\..+GameMode)/d' "${LINUX_DIR}/configs/${ARGS['port']}/Game.ini";
 
 if [ ! -z "${ARGS['playmode']}" ]; then
 
-  sed -i -r "s/^(PlayMode)=.*/\1=${ARGS['playmode']}/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
+  sed -i -r "s/^(PlayMode)=.*/\1=${ARGS['playmode']}/g" "${LINUX_DIR}/configs/${ARGS['port']}/Game.ini";
 
   if [ "${ARGS['gamemode']^^}" = "BOMB" ] && [ "${ARGS['gamemode']}" = "Comp" ]; then
 
-    sed -i -r "s/^(Deckname)=(UnrankedBOMB|INF)Deck0.*/\1=${ARGS['gamemode']^^}Deck0/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
+    sed -i -r "s/^(Deckname)=(UnrankedBOMB|INF)Deck0.*/\1=${ARGS['gamemode']^^}Deck0/g" "${LINUX_DIR}/configs/${ARGS['port']}/Game.ini";
 
   else
 
-    sed -i -r "s/^(Deckname)=INFDeck0.*/\1=${ARGS['gamemode']^^}Deck0/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
+    sed -i -r "s/^(Deckname)=INFDeck0.*/\1=${ARGS['gamemode']^^}Deck0/g" "${LINUX_DIR}/configs/${ARGS['port']}/Game.ini";
 
   fi
 
@@ -126,21 +126,21 @@ fi
 if [ ! -z "${ARGS['steamid']}" ] ; then
 
   for steamid in ${ARGS['steamid']}; do
-  
+
     if [ "${steamid// /}" = "${ARGS[steamid]/ *}" ]; then
-    
-      sed -i -r "s/^(\+AdminSteamIDs)=.*/\1=\"${steamid// /}\"/g" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
-    
+
+      sed -i -r "s/^(\+AdminSteamIDs)=.*/\1=\"${steamid// /}\"/g" "${LINUX_DIR}/configs/${ARGS['port']}/Game.ini";
+
     else
-    
-      sed -i "/+AdminSteamIDs=/a +AdminSteamIDs=\"${steamid// /}\"" "${CUR_DIR}/configs/${ARGS['port']}/Game.ini";
-    
+
+      sed -i "/+AdminSteamIDs=/a +AdminSteamIDs=\"${steamid// /}\"" "${LINUX_DIR}/configs/${ARGS['port']}/Game.ini";
+
     fi
 
   done
 
 fi
 
-cd "${CUR_DIR}";
+cd "${LINUX_DIR}";
 
-./Battalion/Binaries/Linux/BattalionServer /Game/Maps/Final_Maps/${ARGS['map']}?Game=/Script/ShooterGame.${ARGS['gamemode']}GameMode?listen -broadcastip="${ARGS['ip']}" -PORT=${ARGS['port']} -QueryPort=${ARGS['queryport']:=$(( ${ARGS['port']} - 1000 ))} -log -logfilesloc="${CUR_DIR}/logs/configs/${ARGS['port']}" -userdir="${CUR_DIR}" -defgameini="${CUR_DIR}/configs/${ARGS['port']}/Game.ini"
+${LINUX_DIR}/Battalion/Binaries/Linux/BattalionServer /Game/Maps/Final_Maps/${ARGS['map']}?Game=/Script/ShooterGame.${ARGS['gamemode']}GameMode?listen -broadcastip="${ARGS['ip']}" -PORT=${ARGS['port']} -QueryPort=${ARGS['queryport']:=$(( ${ARGS['port']} - 1000 ))} -log -logfilesloc="${LINUX_DIR}/logs/configs/${ARGS['port']}" -userdir="${LINUX_DIR}" -defgameini="${LINUX_DIR}/configs/${ARGS['port']}/Game.ini"
